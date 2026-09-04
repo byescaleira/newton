@@ -1,0 +1,41 @@
+# newton/Dockerfile.newton
+#
+# Newton (fork of judge0) — hardened sandbox image.
+#
+# The stock judge0/judge0 image ships isolate 1.8.1, which segfaults on
+# modern kernels (glibc 2.28 dynamic-loader crash inside the sandbox) and
+# has no cgroup v2 support. This layer replaces it with isolate v2.7,
+# built from the pinned tag with a compat header for the EOL Debian
+# buster toolchain. Nothing else in the judge0 stack is touched, which
+# keeps the fork trivially mergeable with upstream.
+
+FROM judge0/judge0:latest
+
+USER root
+
+# buster is EOL: point apt at archive.debian.org, install build deps,
+# then drop the lists to keep the layer small.
+RUN rm -f /etc/apt/sources.list.d/*.list \
+    && echo "deb http://archive.debian.org/debian buster main" > /etc/apt/sources.list \
+    && echo "deb http://archive.debian.org/debian buster-updates main" >> /etc/apt/sources.list \
+    && apt-get update -qq -o Acquire::Check-Valid-Until=false \
+    && apt-get install -y -qq -o Acquire::Check-Valid-Until=false \
+        libseccomp-dev libsystemd-dev libcap-dev pkg-config git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Build isolate v2.7 (pinned tag) with the compat header force-included.
+COPY compat.h /tmp/compat.h
+RUN git clone --depth 1 --branch v2.7 https://github.com/ioi/isolate.git /tmp/isolate-src \
+    && cd /tmp/isolate-src \
+    && for f in *.c; do sed -i "1i #include \"/tmp/compat.h\"" "$f"; done \
+    && make -j"$(nproc)" isolate \
+    && install -m 4755 -o root -g root ./isolate /usr/local/bin/isolate \
+    && ./isolate --version \
+    && rm -rf /tmp/isolate-src /tmp/compat.h
+
+# isolate 2.7 requires lock_root, absent from the stock 1.8.1 config.
+RUN grep -q '^lock_root' /usr/local/etc/isolate \
+    || echo "lock_root = /run/isolate" >> /usr/local/etc/isolate \
+    && mkdir -p /run/isolate
+
+USER judge0

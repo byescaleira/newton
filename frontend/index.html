@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>newton — Swift playground</title>
+<style>
+  /* byescaleira design system: two-ink screenprint tokens (bone paper theme) */
+  :root {
+    --background: #f3efe5;
+    --surface: #e6e0d2;
+    --card: #fbf8f1;
+    --foreground: #26241f;
+    --ink-2: #4e4a41;
+    --ink-3: #5f5a50;
+    --hairline: #4e4a41;
+    --accent-solid: #ff6b00;
+    --accent-ink: #ad3e00;
+    --on-accent: #26241f;
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0b0a09;
+      --surface: #17150f;
+      --card: #252019;
+      --foreground: #eae4d6;
+      --ink-2: #ada595;
+      --ink-3: #918a7c;
+      --hairline: rgba(234,228,214,.34);
+      --accent-ink: #ff8a3d;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+                 "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 2rem;
+  }
+  .plate {
+    background: var(--card);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    max-width: 34rem;
+    width: 100%;
+    overflow: hidden;
+  }
+  .band {
+    background: var(--foreground);
+    color: var(--background);
+    padding: 1.125rem 1.5rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    font-size: .8125rem;
+    font-weight: 600;
+  }
+  .body { padding: 1.75rem 1.5rem 2rem; }
+  h1 { font-size: 1.3125rem; font-weight: 600; letter-spacing: -.02em; margin-bottom: .75rem; }
+  p { font-size: 1.0625rem; line-height: 1.47; color: var(--ink-2); margin-bottom: 1.25rem; }
+  .status {
+    display: inline-flex; align-items: center; gap: .5rem;
+    border: 1px solid var(--hairline);
+    border-radius: 980px;
+    padding: .375rem .875rem;
+    font-size: .9375rem;
+    color: var(--ink-3);
+  }
+  .status .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent-solid);
+  }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: .9em; color: var(--accent-ink); }
+</style>
+</head>
+<body>
+  <main class="plate">
+    <div class="band">newton · api</div>
+    <div class="body">
+      <h1>Swift playground</h1>
+      <p>The frontend for the code-execution service that powers the iOS
+      curriculum. It will grow here, on this host, from this monorepo.</p>
+      <p class="status"><span class="dot"></span> <code>/api</code> is live</p>
+    </div>
+  </main>
+</body>
+</html>
