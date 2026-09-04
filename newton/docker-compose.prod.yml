@@ -17,8 +17,8 @@ services:
   server:
     image: newton/judge0:latest
     build:
-      context: ./newton
-      dockerfile: Dockerfile.newton
+      context: ..
+      dockerfile: newton/Dockerfile.newton
     volumes:
       - ../judge0.conf:/judge0.conf:ro
     privileged: true
@@ -28,8 +28,8 @@ services:
   worker:
     image: newton/judge0:latest
     build:
-      context: ./newton
-      dockerfile: Dockerfile.newton
+      context: ..
+      dockerfile: newton/Dockerfile.newton
     command: ["./scripts/workers"]
     volumes:
       - ../judge0.conf:/judge0.conf:ro
