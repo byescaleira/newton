@@ -24,7 +24,7 @@ RUN rm -f /etc/apt/sources.list.d/*.list \
     && rm -rf /var/lib/apt/lists/*
 
 # Build isolate v2.7 (pinned tag) with the compat header force-included.
-COPY compat.h /tmp/compat.h
+COPY newton/compat.h /tmp/compat.h
 RUN git clone --depth 1 --branch v2.7 https://github.com/ioi/isolate.git /tmp/isolate-src \
     && cd /tmp/isolate-src \
     && for f in *.c; do sed -i "1i #include \"/tmp/compat.h\"" "$f"; done \
