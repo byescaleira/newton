@@ -1,9 +1,11 @@
-# newton/compat.h
-#
-# UAPI definitions missing from Debian buster's kernel headers (x86_64).
-# isolate v2.7 targets kernel 5.x+ APIs that buster's glibc 2.28 /
-# linux-libc-dev predate. This header is force-included at the top of
-# every isolate source file during the image build (see Dockerfile.newton).
+/*
+ * newton/compat.h
+ *
+ * UAPI definitions missing from Debian buster's kernel headers (x86_64).
+ * isolate v2.7 targets kernel 5.x+ APIs that buster's glibc 2.28 /
+ * linux-libc-dev predate. This header is force-included at the top of
+ * every isolate source file during the image build (see Dockerfile.newton).
+ */
 
 #ifndef _NEWTON_COMPAT_H
 #define _NEWTON_COMPAT_H
