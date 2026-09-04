@@ -21,6 +21,9 @@ services:
       dockerfile: newton/Dockerfile.newton
     volumes:
       - ../judge0.conf:/judge0.conf:ro
+    ports:
+      # localhost only — Caddy fronts this; never expose publicly
+      - "127.0.0.1:2358:2358"
     privileged: true
     <<: *default-logging
     restart: always
