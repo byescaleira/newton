@@ -1,0 +1,22 @@
+# Newton site block — Frappe LMS behind Caddy
+#
+# Frontend (nginx) binds to 127.0.0.1:8080 (see deploy/docker-compose.prod.yml).
+
+newton.byescaleira.com {
+	reverse_proxy 127.0.0.1:8080
+
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	log {
+		output file /var/log/newton-access.log {
+			roll_size 100mb
+			roll_keep 10
+		}
+		format json
+	}
+}
