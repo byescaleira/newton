@@ -2,14 +2,17 @@
 
 # Newton hosts the iOS curriculum on Frappe LMS (vendored from frappe/lms).
 # This stack is based on the official frappe_docker pwd.yml layout, adapted:
-#   - image: ghcr.io/frappe/lms (official LMS image, app pre-installed)
-#   - no published port: Caddy fronts learn.newton.byescaleira.com... the
-#     frontend (nginx) binds to localhost only
+#   - image: ghcr.io/frappe/lms, PINNED (the floating `stable` tag ships
+#     without the lms app; v2.26.0 was verified to bundle frappe+lms)
+#   - no published port: Caddy fronts newton.byescaleira.com and the
+#     web (nginx) binds to localhost only
 #   - strong passwords come from .env (never committed)
+
+x-lms-image: &lms-image ghcr.io/frappe/lms:v2.26.0
 
 services:
   configurator:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     entrypoint:
       - bash
       - -c
@@ -34,7 +37,7 @@ services:
     restart: "no"
 
   create-site:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     entrypoint:
       - bash
       - -c
@@ -68,7 +71,7 @@ services:
     restart: "no"
 
   backend:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     volumes:
       - sites:/home/frappe/frappe-bench/sites
       - logs:/home/frappe/frappe-bench/logs
@@ -81,7 +84,7 @@ services:
     restart: always
 
   websocket:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     command:
       - node
       - /home/frappe/frappe-bench/apps/frappe/socketio.js
@@ -94,7 +97,7 @@ services:
     restart: always
 
   web:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     command:
       - nginx-entrypoint.sh
     environment:
@@ -118,7 +121,7 @@ services:
     restart: always
 
   scheduler:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     command:
       - bench
       - schedule
@@ -131,7 +134,7 @@ services:
     restart: always
 
   queue-short:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     command:
       - bench
       - worker
@@ -146,7 +149,7 @@ services:
     restart: always
 
   queue-long:
-    image: ghcr.io/frappe/lms:stable
+    image: *lms-image
     command:
       - bench
       - worker
